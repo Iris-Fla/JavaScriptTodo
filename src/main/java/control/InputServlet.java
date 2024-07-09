@@ -1,55 +1,58 @@
 package control;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * 入力を受け付けるサーブレット
- */
 @WebServlet("/input-servlet")
 public class InputServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// リクエストのエンコーディング方式を指定
-		request.setCharacterEncoding("UTF-8");
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        DatabaseUtil.initializeDatabase();
+    }
 
-		// リクエストパラメータの取得
-		String nameStr = "【名前】" + request.getParameter("name");
-		String passwordStr = "【パスワード】" + request.getParameter("password");
-		String genderStr = "【性別】" + request.getParameter("gender");
-		String[] foodArray = request.getParameterValues("food");
-		String foodStr = "【好物】";
-		if (foodArray != null) {
-			for (String food : foodArray) {
-				foodStr += (food + "　");
-			}
-		} else {
-			foodStr += "(未選択)";
-		}
-		String hobbyStr = "【趣味】" + request.getParameter("hobby");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
 
-		// リクエストスコープへのデータ格納
-		request.setAttribute("name", nameStr);
-		request.setAttribute("password", passwordStr);
-		request.setAttribute("gender", genderStr);
-		request.setAttribute("food", foodStr);
-		request.setAttribute("hobby", hobbyStr);
-		
-		// 転送オブジェクトを取得
-		RequestDispatcher dispatcher = request.getRequestDispatcher("output-servlet");
+        String nameStr = request.getParameter("name");
+        String passwordStr = request.getParameter("password");
+        String genderStr = request.getParameter("gender");
+        String[] foodArray = request.getParameterValues("food");
+        String foodStr = (foodArray != null) ? String.join("、", foodArray) : "(未選択)";
+        String hobbyStr = request.getParameter("hobby");
 
-		// 転送
-		dispatcher.forward(request, response);
-	}
+        // データベースに保存
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(
+                 "INSERT INTO user_inputs (name, password, gender, food, hobby) VALUES (?, ?, ?, ?, ?)")) {
+            pstmt.setString(1, nameStr);
+            pstmt.setString(2, passwordStr);
+            pstmt.setString(3, genderStr);
+            pstmt.setString(4, foodStr);
+            pstmt.setString(5, hobbyStr);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            request.getRequestDispatcher("/sexyMutsuki");
+            // エラーハンドリング（例：エラーページにリダイレクト）
+        }
 
+        request.setAttribute("name", nameStr);
+        request.setAttribute("password", passwordStr);
+        request.setAttribute("gender", genderStr);
+        request.setAttribute("food", foodStr);
+        request.setAttribute("hobby", hobbyStr);
+        
+        request.getRequestDispatcher("/WEB-INF/output.jsp").forward(request, response);
+    }
 }

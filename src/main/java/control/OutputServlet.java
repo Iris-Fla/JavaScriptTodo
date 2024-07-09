@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
+
+
 //出力サーブレット
 @WebServlet("/output-servlet")
 public class OutputServlet extends HttpServlet {
@@ -17,7 +19,88 @@ public class OutputServlet extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * 
+	 * 
 	 */
+	private static final String CSS =
+            ":root {\n" +
+            "    --primary-color: #4CAF50;\n" +
+            "    --secondary-color: #45a049;\n" +
+            "    --background-color: #f0f8ff;\n" +
+            "    --text-color: #333;\n" +
+            "}\n" +
+            "\n" +
+            "* {\n" +
+            "    margin: 0;\n" +
+            "    padding: 0;\n" +
+            "    box-sizing: border-box;\n" +
+            "}\n" +
+            "\n" +
+            "body {\n" +
+            "    font-family: 'Helvetica Neue', Arial, sans-serif;\n" +
+            "    background-color: var(--background-color);\n" +
+            "    color: var(--text-color);\n" +
+            "    line-height: 1.6;\n" +
+            "    display: flex;\n" +
+            "    justify-content: center;\n" +
+            "    align-items: center;\n" +
+            "    min-height: 100vh;\n" +
+            "    padding: 20px;\n" +
+            "}\n" +
+            "\n" +
+            ".container {\n" +
+            "    background-color: white;\n" +
+            "    padding: 40px;\n" +
+            "    border-radius: 8px;\n" +
+            "    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n" +
+            "    width: 100%;\n" +
+            "    max-width: 500px;\n" +
+            "}\n" +
+            "\n" +
+            "h2 {\n" +
+            "    color: var(--primary-color);\n" +
+            "    margin-bottom: 20px;\n" +
+            "    text-align: center;\n" +
+            "    font-size: 28px;\n" +
+            "}\n" +
+            "\n" +
+            ".input-item {\n" +
+            "    margin-bottom: 15px;\n" +
+            "    padding: 10px;\n" +
+            "    background-color: #f9f9f9;\n" +
+            "    border-radius: 4px;\n" +
+            "}\n" +
+            "\n" +
+            ".input-label {\n" +
+            "    font-weight: bold;\n" +
+            "    color: var(--primary-color);\n" +
+            "    margin-bottom: 5px;\n" +
+            "}\n" +
+            "\n" +
+            ".input-value {\n" +
+            "    font-size: 16px;\n" +
+            "}\n" +
+            "\n" +
+            ".back-link {\n" +
+            "    display: inline-block;\n" +
+            "    margin-top: 20px;\n" +
+            "    color: var(--primary-color);\n" +
+            "    text-decoration: none;\n" +
+            "    font-weight: bold;\n" +
+            "    transition: color 0.3s;\n" +
+            "}\n" +
+            "\n" +
+            ".back-link:hover {\n" +
+            "    color: var(--secondary-color);\n" +
+            "}\n" +
+            "\n" +
+            ".footer-note {\n" +
+            "    margin-top: 30px;\n" +
+            "    font-size: 12px;\n" +
+            "    color: #777;\n" +
+            "    text-align: center;\n" +
+            "}";
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		// リクエストスコープからデータ取得
@@ -33,25 +116,47 @@ public class OutputServlet extends HttpServlet {
 		// レスポンス書き出し用オブジェクトの取得
 		PrintWriter out = response.getWriter();
 
-		//レスポンスの書き出し
-		out.println("<!DOCTYPE html>                                 ");
-		out.println("<html>                                          ");
-		out.println("<head>                                          ");
-		out.println("<meta charset=\"UTF-8\">                        ");
-		out.println("<title>入力内容</title>                         ");
-		out.println("<link rel=\"stylesheet\" href=\"style.css\">    ");
-		out.println("</head>                                         ");
-		out.println("<body>                                          ");
-		out.println("    <h2>入力内容</h2>                           ");
-		out.println("    " + nameStr + "<br><br>                     ");
-		out.println("    " + passwordStr + "<br><br>                 ");
-		out.println("    " + genderStr + "<br><br>                   ");
-		out.println("    " + foodStr + "<br><br>                     ");
-		out.println("    " + hobbyStr + "<br><br>                    ");
-		out.println("<br><a href=\"input.html\">入力フォームへ</a>     ");
-		out.println("<br><br><br>------これは、OutputServletで書き出しています。------");
-		out.println("</body>                                         ");
-		out.println("</html>                                         ");
+		out.println("<!DOCTYPE html>");
+		out.println("<html lang=\"ja\">");
+		out.println("<head>");
+		out.println("<meta charset=\"UTF-8\">");
+		out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+		out.println("<title>入力内容</title>");
+		out.println("<style>");
+		out.println(CSS);
+		out.println("</style>");
+		out.println("</head>");
+		out.println("<body>");
+		out.println("    <div class=\"container\">");
+		out.println("        <h2>入力内容</h2>");
+		out.println("        <div class=\"input-item\">");
+		out.println("            <div class=\"input-label\">お名前</div>");
+		out.println("            <div class=\"input-value\">" + nameStr + "</div>");
+		out.println("        </div>");
+		out.println("        <div class=\"input-item\">");
+		out.println("            <div class=\"input-label\">だだもれパスワード</div>");
+		out.println("            <div class=\"input-value\">" + passwordStr + "</div>");
+		out.println("        </div>");
+		out.println("        <div class=\"input-item\">");
+		out.println("            <div class=\"input-label\">SEX</div>");
+		out.println("            <div class=\"input-value\">" + genderStr + "</div>");
+		out.println("        </div>");
+		out.println("        <div class=\"input-item\">");
+		out.println("            <div class=\"input-label\">ごはん</div>");
+		out.println("            <div class=\"input-value\">" + foodStr + "</div>");
+		out.println("        </div>");
+		out.println("        <div class=\"input-item\">");
+		out.println("            <div class=\"input-label\">性癖</div>");
+		out.println("            <div class=\"input-value\">" + hobbyStr + "</div>");
+		out.println("        </div>");
+		// 他の入力項目も同様に出力
+		out.println("        <a href=\"/sexyMutsuki\" class=\"back-link\">入力フォームへ戻る</a>");
+		out.println("        <div class=\"footer-note\">");
+		out.println("            これは、OutputServletで書き出しています。");
+		out.println("        </div>");
+		out.println("    </div>");
+		out.println("</body>");
+		out.println("</html>");
 	}
 
 }
