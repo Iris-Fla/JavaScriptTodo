@@ -1,17 +1,20 @@
-package control;
+package util;
 
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DatabaseUtil {
-    private static final String DB_URL = "jdbc:sqlite:sexyMutsuki.db";
+    private static final String DB_URL = "jdbc:sqlite:" + Paths.get(System.getProperty("user.dir"), "sexyMutsuki.db").toString();
 
     static {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            System.out.println("pien");
         }
     }
 
@@ -21,7 +24,7 @@ public class DatabaseUtil {
 
     public static void initializeDatabase() {
         try (Connection conn = getConnection();
-             var stmt = conn.createStatement()) {
+             Statement stmt = conn.createStatement()) {
             stmt.execute("CREATE TABLE IF NOT EXISTS user_inputs (" +
                          "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                          "name TEXT," +

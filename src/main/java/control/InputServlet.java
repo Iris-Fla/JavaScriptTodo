@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import util.DatabaseUtil;
+
 @WebServlet("/input-servlet")
 public class InputServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -31,7 +33,6 @@ public class InputServlet extends HttpServlet {
         String foodStr = (foodArray != null) ? String.join("、", foodArray) : "(未選択)";
         String hobbyStr = request.getParameter("hobby");
 
-        // データベースに保存
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(
                  "INSERT INTO user_inputs (name, password, gender, food, hobby) VALUES (?, ?, ?, ?, ?)")) {
@@ -40,11 +41,17 @@ public class InputServlet extends HttpServlet {
             pstmt.setString(3, genderStr);
             pstmt.setString(4, foodStr);
             pstmt.setString(5, hobbyStr);
-            pstmt.executeUpdate();
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Data successfully inserted into the database.");
+            } else {
+                System.out.println("Failed to insert data into the database.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            request.getRequestDispatcher("/sexyMutsuki");
-            // エラーハンドリング（例：エラーページにリダイレクト）
+            request.setAttribute("error", "データの保存中にエラーが発生しました。");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            return;
         }
 
         request.setAttribute("name", nameStr);
