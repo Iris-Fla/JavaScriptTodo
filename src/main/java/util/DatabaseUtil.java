@@ -3,6 +3,7 @@ package util;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -25,14 +26,25 @@ public class DatabaseUtil {
     public static void initializeDatabase() {
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement()) {
-            stmt.execute("CREATE TABLE IF NOT EXISTS user_inputs (" +
-                         "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                         "name TEXT," +
-                         "password TEXT," +
-                         "gender TEXT," +
-                         "food TEXT," +
-                         "hobby TEXT)");
+        	 System.out.println(DB_URL);
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 新しいメソッド: mutsukiKawaiiテーブルにデータを追加する
+    public static void addMutsukiKawaii(String value) {
+        String sql = "SELECT * FROM mutugaki";
+        
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+//            pstmt.setString(1, value);
+            pstmt.executeUpdate();
+            
+            System.out.println("新しい値が mutsukiKawaii テーブルに追加されました: " + value);
+        } catch (SQLException e) {
+            System.out.println("データの追加中にエラーが発生しました");
             e.printStackTrace();
         }
     }

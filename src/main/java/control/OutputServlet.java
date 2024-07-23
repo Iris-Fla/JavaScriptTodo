@@ -138,15 +138,15 @@ public class OutputServlet extends HttpServlet {
 		out.println("            <div class=\"input-value\">" + passwordStr + "</div>");
 		out.println("        </div>");
 		out.println("        <div class=\"input-item\">");
-		out.println("            <div class=\"input-label\">SEX</div>");
+		out.println("            <div class=\"input-label\">性別</div>");
 		out.println("            <div class=\"input-value\">" + genderStr + "</div>");
 		out.println("        </div>");
 		out.println("        <div class=\"input-item\">");
-		out.println("            <div class=\"input-label\">ごはん</div>");
+		out.println("            <div class=\"input-label\">すきなごはん</div>");
 		out.println("            <div class=\"input-value\">" + foodStr + "</div>");
 		out.println("        </div>");
 		out.println("        <div class=\"input-item\">");
-		out.println("            <div class=\"input-label\">性癖</div>");
+		out.println("            <div class=\"input-label\">好きな鶏の部位</div>");
 		out.println("            <div class=\"input-value\">" + hobbyStr + "</div>");
 		out.println("        </div>");
 		// 他の入力項目も同様に出力

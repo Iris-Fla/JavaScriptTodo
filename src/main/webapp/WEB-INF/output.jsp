@@ -93,19 +93,19 @@
             <div class="input-value">${name}</div>
         </div>
         <div class="input-item">
-            <div class="input-label">だだもれパスワード</div>
+            <div class="input-label">パスワード</div>
             <div class="input-value">${password}</div>
         </div>
         <div class="input-item">
-            <div class="input-label">SEX</div>
+            <div class="input-label">恋愛対象</div>
             <div class="input-value">${gender}</div>
         </div>
         <div class="input-item">
-            <div class="input-label">ごはん</div>
+            <div class="input-label">食べていそうな物</div>
             <div class="input-value">${food}</div>
         </div>
         <div class="input-item">
-            <div class="input-label">性癖</div>
+            <div class="input-label">好きな鶏の部位</div>
             <div class="input-value">${hobby}</div>
         </div>
         <a href="/sexyMutsuki" class="back-link">入力フォームへ戻る</a>
